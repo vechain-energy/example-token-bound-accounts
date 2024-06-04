@@ -76,9 +76,9 @@ sequenceDiagram
     Account->>TokenContract: balanceOf(msg.sender, tokenId) & totalSupply(tokenId)
     TokenContract-->>Account: balance + totalSupply
 
-    alt msg.sender balance == totalSupply
+    alt balance == totalSupply
       Account->>Blockchain: execute instructions
-    else msg.sender balance != totalSupply
+    else balance != totalSupply
       Account-->>User: revert
     end
 ```
