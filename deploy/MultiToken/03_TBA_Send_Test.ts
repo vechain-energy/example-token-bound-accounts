@@ -1,37 +1,36 @@
 
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import type { DeployFunction } from 'hardhat-deploy/types';
-import type { ERC6551Registry, NFT, ERC20, ERC6551Account } from '../../typechain-types';
+import type { ERC6551Registry, MultiToken, ERC6551AccountERC1155 } from '../../typechain-types';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const { deployer, proxyOwner, owner } = await hre.getNamedAccounts();
 
-    const nft = await hre.ethers.getContract('NFT') as NFT
-    const tokenBalance = await nft.balanceOf(owner)
+    const tokenId = 0
+    const multiToken = await hre.ethers.getContract('MultiToken') as MultiToken
+    const tokenBalance = await multiToken.balanceOf(owner, tokenId)
     if (!tokenBalance) { return }
 
     const chainId = BigInt((await hre.ethers.provider.getBlock(0))?.hash ?? 0)
-    const tokenId = await nft.tokenOfOwnerByIndex(owner, 0)
     const salt = tokenId
 
     const registry = await hre.ethers.getContract('ERC6551Registry') as ERC6551Registry
-    const accountImplementation = await hre.ethers.getContract('ERC6551Account')
+    const accountImplementation = await hre.ethers.getContract('ERC6551AccountERC1155') as ERC6551AccountERC1155
     const accountAddress = await registry.account(
         await accountImplementation.getAddress(),
         chainId,
-        await nft.getAddress(),
+        await multiToken.getAddress(),
         tokenId,
         salt,
     )
 
-    const tba = await hre.ethers.getContractAt('ERC6551Account', accountAddress)
-    console.log('TBA Chain Id', await tba.getChainId())
-    console.log('TBA Owner', await tba.owner())
+    const tba = await hre.ethers.getContractAt('ERC6551AccountERC1155', accountAddress)
+    console.log('MultiTBA Owner', await tba.owner())
 
     const vetBalance = await hre.ethers.provider.getBalance(accountAddress);
     console.log('VET Balance is', hre.ethers.formatEther(vetBalance));
 
-    const vtho = await hre.ethers.getContractAt('ERC20', '0x0000000000000000000000000000456e65726779') as ERC20
+    const vtho = await hre.ethers.getContractAt('ERC20', '0x0000000000000000000000000000456e65726779')
     const vthoBalance = await vtho.balanceOf(accountAddress);
     console.log('VTHO Token Balance is', hre.ethers.formatUnits(vthoBalance, 18));
 
