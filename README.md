@@ -14,6 +14,7 @@ erDiagram
 
     User ||--o{ Token : owns
     User ||--o{ Registry : interacts
+    User ||--o{ Account : instructs
 
     Registry ||--|{ Account : creates
 
