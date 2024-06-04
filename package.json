@@ -1,0 +1,31 @@
+{
+  "name": "hardhat-token-bound-accounts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "hardhat compile",
+    "test": "hardhat test",
+    "test:watch": "nodemon -e sol,ts --watch contracts --watch test --exec 'hardhat compile; hardhat typechain; hardhat test'",
+    "coverage": "hardhat coverage",
+    "typechain": "hardhat typechain",
+    "deploy": "hardhat deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.6",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^5.0.2",
+    "@openzeppelin/contracts-upgradeable": "^5.0.2",
+    "@openzeppelin/hardhat-upgrades": "^3.1.1",
+    "@vechain/sdk-hardhat-plugin": "^1.0.0-beta.12",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.0",
+    "hardhat": "^2.22.5",
+    "hardhat-deploy": "^0.12.4",
+    "hardhat-deploy-ethers": "^0.4.2",
+    "nodemon": "^3.1.3"
+  }
+}
